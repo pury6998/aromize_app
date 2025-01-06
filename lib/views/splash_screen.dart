@@ -1,3 +1,4 @@
+import 'package:aromize_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:aromize_app/controller/splash_screen_controller.dart';
@@ -11,7 +12,8 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Set the background color to white
+      backgroundColor:
+          AppColors.extraWhite, // Set the background color to white
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

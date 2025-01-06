@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:aromize_app/controller/dash_screen_controller.dart';
 import 'package:aromize_app/utils/colors.dart';
 import 'package:aromize_app/utils/image_path.dart';
@@ -86,7 +88,7 @@ class DashScreen extends StatelessWidget {
                   icon: SvgPicture.asset(
                     ImagePath.mail, // Updated icon path if different
                     color: c.currentIndex.value == 4
-                        ? AppColors.secondaryColor
+                        ? AppColors.primaryColor
                         : AppColors.unselectedGrey,
                     height: 24,
                   ),
