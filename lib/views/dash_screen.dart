@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
-
-import 'package:aromize_app/controller/dash_screen_controller.dart';
+import 'package:aromize_app/controller/dashboard/dash_screen_controller.dart';
 import 'package:aromize_app/utils/colors.dart';
 import 'package:aromize_app/utils/image_path.dart';
 import 'package:flutter/material.dart';

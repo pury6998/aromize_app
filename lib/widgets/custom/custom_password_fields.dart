@@ -34,6 +34,7 @@ class CustomPasswordField extends StatelessWidget {
     this.preIconPath,
     this.prefixIconColor,
     this.preIconSize,
+    Color? fillColor,
   });
 
   @override

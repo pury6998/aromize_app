@@ -48,7 +48,7 @@ class CustomTextField extends StatelessWidget {
     this.maxCharacters,
     this.focusNode,
     this.labelText,
-    this.prefixIconColor, this.preIconSize,
+    this.prefixIconColor, this.preIconSize, required int borderRadius, Color? borderColor,
   });
 
   @override

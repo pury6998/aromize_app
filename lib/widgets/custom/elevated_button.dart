@@ -10,14 +10,16 @@ class CustomElevatedButton extends StatelessWidget {
   final bool isDisabled;
   final Color? backGroundColor;
   final Color? textColor;
-  const CustomElevatedButton(
-      {super.key,
-      required this.title,
-      required this.onTap,
-      this.height = 55,
-      this.isDisabled = false,
-      this.backGroundColor,
-      this.textColor});
+  const CustomElevatedButton({
+    super.key,
+    required this.title,
+    required this.onTap,
+    this.height = 55,
+    this.isDisabled = false,
+    this.backGroundColor,
+    this.textColor,
+    textStyle,
+  });
 
   @override
   Widget build(BuildContext context) {

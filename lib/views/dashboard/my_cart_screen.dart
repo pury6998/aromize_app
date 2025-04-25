@@ -1,228 +1,254 @@
-import 'package:aromize_app/controller/dashboard/cart_screen_controller.dart';
-import 'package:aromize_app/utils/colors.dart';
-import 'package:aromize_app/utils/custom_text_style.dart';
-import 'package:aromize_app/utils/image_path.dart';
-import 'package:aromize_app/widgets/custom/elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:aromize_app/controller/dashboard/cart_screen_controller.dart';
+import 'package:aromize_app/utils/colors.dart';
+import 'package:aromize_app/widgets/custom/elevated_button.dart';
 
 class MyCartScreen extends StatelessWidget {
   static String routeName = "/my-cart-screen";
-  final c = Get.put(MyCartScreenController());
+  final MyCartScreenController c = Get.put(MyCartScreenController());
+
   MyCartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.extraWhite,
-
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        elevation: 2,
-        centerTitle: false,
-        backgroundColor: AppColors.extraWhite,
-        leading: InkWell(
-          onTap: () => Get.back(),
-          child: const Icon(
-            Icons.arrow_back,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Get.back(),
+        ),
+        title: Text(
+          "My Cart (${c.cartItems.length})", // Dynamically display cart item count
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
         ),
-        title: Text("My Cart (2)",
-            style: CustomTextStyles.f16W600(color: AppColors.textColor)),
         actions: [
-          InkWell(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 18),
-              child: Text("Delete",
-                  style:
-                      CustomTextStyles.f16W400(color: AppColors.primaryColor)),
+          TextButton(
+            onPressed: () => _clearCart(),
+            child: Text(
+              "Delete All",
+              style: TextStyle(
+                color: AppColors.primaryColor,
+                fontSize: 16,
+              ),
             ),
-          )
+          ),
         ],
       ),
       body: Column(
         children: [
-          const SizedBox(height: 20),
-          MyCartWidget(c: c),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration:
-            const BoxDecoration(color: AppColors.extraWhite, boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryColor,
-            blurRadius: 7.0,
-            offset: Offset(5, 5),
-          )
-        ]),
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 18, right: 18, top: 12, bottom: 10),
-          child: Row(
-            children: [
-              InkWell(
-                onTap: c.toggleSelectionAll,
-                child: Obx(() => Container(
-                    height: 25,
-                    width: 25,
-                    decoration: BoxDecoration(
-                      color: AppColors.extraWhite,
-                      border: Border.all(
-                          width: 1,
-                          color: c.isSelectedAll.value
-                              ? AppColors.primaryColor
-                              : AppColors.lGrey),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: Center(
-                      child: Container(
-                        height: 15,
-                        width: 15,
-                        decoration: BoxDecoration(
-                          color: c.isSelectedAll.value
-                              ? AppColors.primaryColor
-                              : AppColors.extraWhite,
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                    ))),
+          Expanded(
+            child: Obx(
+              () => ListView.separated(
+                padding: EdgeInsets.all(20),
+                itemCount: c.cartItems.length,
+                separatorBuilder: (context, index) => SizedBox(height: 20),
+                itemBuilder: (context, index) {
+                  int productId = c.cartItems.keys.toList()[index];
+                  return _buildCartItem(productId);
+                },
               ),
-              const SizedBox(width: 10),
-              Text("All", style: CustomTextStyles.f14W400()),
-              const SizedBox(width: 80),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(
-                  children: [
-                    Text("Delivery:",
-                        style:
-                            CustomTextStyles.f14W400(color: AppColors.lGrey)),
-                    Text("Rs.0",
-                        style: CustomTextStyles.f14W400(
-                            color: AppColors.primaryColor)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Text("Total:",
-                        style:
-                            CustomTextStyles.f14W600(color: AppColors.lGrey)),
-                    Text("Rs.0",
-                        style: CustomTextStyles.f16W600(
-                            color: AppColors.primaryColor)),
-                  ],
-                )
-              ]),
-              const SizedBox(width: 13),
-              SizedBox(
-                  height: 55,
-                  width: Get.width / 3.2,
-                  child: CustomElevatedButton(
-                      title: "Check Out",
-                      onTap: () {
-                        
-                      })),
-            ],
+            ),
           ),
-        ),
+          _buildCheckoutBar(),
+        ],
       ),
     );
   }
-}
 
-class MyCartWidget extends StatelessWidget {
-  const MyCartWidget({
-    super.key,
-    required this.c,
-  });
-
-  final MyCartScreenController c;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 18, right: 18, top: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          InkWell(
-            onTap: c.toggleSelection,
-            child: Obx(() => Container(
-                height: 25,
-                width: 25,
-                decoration: BoxDecoration(
-                  color: AppColors.extraWhite,
-                  border: Border.all(
-                      width: 1,
-                      color: c.isSelected.value
-                          ? AppColors.primaryColor
-                          : AppColors.lGrey),
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Center(
-                  child: Container(
-                    height: 15,
-                    width: 15,
-                    decoration: BoxDecoration(
-                      color: c.isSelected.value
-                          ? AppColors.primaryColor
-                          : AppColors.extraWhite,
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                  ),
-                ))),
+  // Cart item UI
+  Widget _buildCartItem(int productId) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 4),
           ),
-          const SizedBox(width: 10),
-          Image.asset(ImagePath.product, height: 70, width: 72),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: 217,
-                child: Text(
-                  "Whiskas 1+ Lamb Dry Cat Food",
-                  style: CustomTextStyles.f16W400(),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Selection Checkbox
+          Obx(() => Checkbox(
+                value: c.selectedItems[productId]?.value ?? false,
+                onChanged: (bool? value) {
+                  c.toggleSelection(productId);
+                },
+                shape: CircleBorder(),
+                activeColor: AppColors.primaryColor,
+              )),
+          SizedBox(width: 12),
+
+          // Product Image
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: NetworkImage(
+                  "https://images.unsplash.com/photo-1594035910387-fea47794261f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SizedBox(width: 16),
+
+          // Product Details
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Noir Essence Eau de Parfum",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              Text(
-                "Brand: Whiskas",
-                style: CustomTextStyles.f12W400(
-                    color: AppColors.secondaryTextColor),
-              ),
-              Row(
-                children: [
-                  Text("Rs.4700",
-                      style: CustomTextStyles.f14W600(
-                          color: AppColors.primaryColor)),
-                  const SizedBox(width: 110),
-                  InkWell(
-                    onTap: c.decrement,
-                    child: Text('-',
-                        style: CustomTextStyles.f16W600(
-                            color: AppColors.textColor)),
+                SizedBox(height: 4),
+                Text(
+                  "100ml Bottle",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
                   ),
-                  const SizedBox(width: 16),
-                  Obx(() => Text(
-                        '${c.count}',
-                        style: CustomTextStyles.f14W400(),
-                      )),
-                  const SizedBox(width: 16),
-                  InkWell(
-                    onTap: c.increment,
-                    child: Text('+',
-                        style: CustomTextStyles.f16W600(
-                            color: AppColors.textColor)),
-                  )
-                ],
-              ),
-            ],
+                ),
+                SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "\$129.99", // Replace with dynamic price
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    _buildQuantitySelector(productId),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
+  }
+
+  // Quantity selector UI
+  Widget _buildQuantitySelector(int productId) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            icon: Icon(Icons.remove, size: 18),
+            onPressed: () => c.decrement(productId),
+            padding: EdgeInsets.zero,
+          ),
+          Obx(() => Text(
+                '${c.cartItems[productId]?.value ?? 0}',
+                style: TextStyle(fontSize: 16),
+              )),
+          IconButton(
+            icon: Icon(Icons.add, size: 18),
+            onPressed: () => c.increment(productId),
+            padding: EdgeInsets.zero,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Checkout bar UI
+  Widget _buildCheckoutBar() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(top: BorderSide(color: Colors.grey[200]!)),
+      ),
+      child: Row(
+        children: [
+          // Select All Checkbox
+          Obx(() => Checkbox(
+                value: c.isSelectedAll.value,
+                onChanged: (bool? value) {
+                  c.toggleSelectionAll();
+                },
+                shape: CircleBorder(),
+                activeColor: AppColors.primaryColor,
+              )),
+          Text("Select All", style: TextStyle(fontSize: 14)),
+          Spacer(),
+
+          // Price Summary
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Obx(() {
+                double total = c.cartItems.values
+                    .map((e) => e.value * 129.99) // Replace with dynamic price
+                    .fold(0.0, (sum, item) => sum + item);
+                return Text(
+                  "Total: \$${total.toStringAsFixed(2)}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                );
+              }),
+              Text(
+                "Free Delivery",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(width: 16),
+
+          // Checkout Button
+          SizedBox(
+            width: 120,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: CustomElevatedButton(
+                title: "Checkout",
+                onTap: () {},
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Clear cart logic
+  void _clearCart() {
+    c.cartItems.clear();
+    c.selectedItems.clear();
   }
 }

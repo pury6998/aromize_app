@@ -128,4 +128,14 @@ class CustomTextStyles {
         fontSize: 32,
         fontWeight: FontWeight.w600);
   }
+
+  static f12W500() {}
+
+  static f16W700() {}
+
+  static f14W500({required Color color}) {}
+
+  static f20W700() {}
+
+  static f20W600({required Color color}) {}
 }

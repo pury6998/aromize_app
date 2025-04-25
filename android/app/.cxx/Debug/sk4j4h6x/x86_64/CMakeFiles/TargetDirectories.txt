@@ -1,0 +1,2 @@
+C:/Users/ASUS/Desktop/Aromize Fyp/Aromize_2025/android/app/.cxx/Debug/sk4j4h6x/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/ASUS/Desktop/Aromize Fyp/Aromize_2025/android/app/.cxx/Debug/sk4j4h6x/x86_64/CMakeFiles/rebuild_cache.dir
